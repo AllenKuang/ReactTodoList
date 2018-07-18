@@ -5,6 +5,7 @@ export default class TodoForm extends Component {
         super(props);
         this.state = {
             todos: [{ id: "zuixian", name: "默认第一任务", complete: false }, { name: "示例", complete: false }],
+            statusOfList: "all",
             activeItems:[],
             completeItems:[]
         }
@@ -36,25 +37,36 @@ export default class TodoForm extends Component {
         return result;
     }
 
-    showTodoList=(which)=>{
-        let todos=this.state.todos;
-        if(which==='active'){
-            for(let i=0;i<todos.length;i++){
-                if(todos[i].complete===false){
-                    this.state.activeItems.push(todos[i]);
-                }
-            }
-        }
-        if(which==='complete'){
-            for(let i=0;i<todos.length;i++){
-                if(todos[i].complete===true){
-                    this.state.completeItems.push(todos[i]);
-                }
-            }
-            let completeItems=this.state.completeItems;
-            this.setState({completeItems})
-        }
+    showTodoList=(filterType) => {
+        //this.state.statusOfList = filterType;
+        this.setState({statusOfList:filterType});
     }
+    // showTodoList=(which)=>{
+    //     let todos=this.state.todos;
+    //     if(which==='all'){
+    //         this.setState({todos});
+    //     }
+    //     if(which==='active'){
+    //         for(let i=0;i<todos.length;i++){
+    //             if(todos[i].complete===false){
+    //                 this.state.activeItems.push(todos[i]);
+    //             }
+    //         }
+    //         let activetodo=this.state.activeItems;
+    //         this.setState({todos:activetodo})
+    //     }
+    //     if(which==='complete'){
+    //         for(let i=0;i<todos.length;i++){
+    //             if(todos[i].complete===true){
+    //                 this.state.completeItems.push(todos[i]);
+    //             }
+    //         }
+    //         let completeItems=this.state.completeItems;
+    //         this.setState({todos:completeItems})
+    //     }
+    // }
+
+
     generateUUID = () => {
         /*jshint bitwise:false */
         var i,
@@ -75,7 +87,8 @@ export default class TodoForm extends Component {
         return uuid;
     }
     render() {
-        var todos = this.state.todos;
+        let todos = this.state.todos;
+        let status=this.state.statusOfList;
         return (
             <div>
                 <h1>TodoList</h1>
@@ -86,9 +99,12 @@ export default class TodoForm extends Component {
                 <br />
                 {/* 做列表 */}
                 <ol>
-                    {todos.map(todo => {
-                        return <li id={todo.id} className={todo.complete ? 'checked' : ''}><input name="done-todo" onChange={(e) => this.checkItem(todo.id, e)} type="checkbox" className="done-todo" /> {todo.name} </li>
+                {this.filterByStatus(todos,status).map(todo => {
+                        return <li contentEditable={true} id={todo.id} className={todo.complete ? 'checked' : ''}><input name="done-todo" onChange={(e) => this.checkItem(todo.id, e)} type="checkbox" className="done-todo" /> {todo.name} </li>
                     })}
+                    {/* {todos.map(todo => {
+                        return <li contentEditable={true} id={todo.id} className={todo.complete ? 'checked' : ''}><input name="done-todo" onChange={(e) => this.checkItem(todo.id, e)} type="checkbox" className="done-todo" /> {todo.name} </li>
+                    })} */}
                 </ol>
                 <div>
                     <ul id="filters">
