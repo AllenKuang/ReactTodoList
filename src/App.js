@@ -1,8 +1,15 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
+import ReactDOM from 'react-dom'
+
 import './App.css';
-import TodoForm from './components/TodoForm';
+
+import TodoForm from './containers/TodoFormContainer';
+
 class App extends Component {
+  constructor(props){
+    super(props)
+  }
   render() {
     return (
       <div className="container">
@@ -12,8 +19,8 @@ class App extends Component {
               <em>Simple Todo List with adding and filter by diff status.</em>
           </p>
       </div>
-      <TodoForm/>
-
+      <TodoForm />
+      
   </div>
       
       
