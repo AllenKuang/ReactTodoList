@@ -1,0 +1,28 @@
+import Todo from '../model/Todo';
+
+const todosAPI = {
+    todos: [{ id: "1", text: "第一个任务", complete: false }],
+    status: Todo.ALL,
+    add(item) {
+        this.todos.push(item);
+      },
+      filerByStatus(status) {
+        if (status === Todo.ALL) {
+          return this.todos;
+        }
+        return this.todos.filter(item => item.status === status);
+      },
+      toggleActive(viewId) {
+        let todo = this.todos.find(item => item.viewId === viewId);
+        if (todo !== undefined) {
+          todo.toggleActive();
+        }
+      },
+      updateItemContent(viewId, content) {
+        let todo = this.todos.find(item => item.viewId === viewId);
+        if (todo !== undefined) {
+          todo.content = content;
+        }
+      }
+}
+export default todosAPI;

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+import Todo from '../model/Todo';
 export default class TodoForm extends Component {
     constructor(props) {
         super(props);
@@ -61,21 +61,29 @@ export default class TodoForm extends Component {
                 <br />
                 <ol>
                 {this.filterByStatus(todos,status).map(todo => {
-                        return <li contentEditable={true} id={todo.id} className={todo.complete ? 'checked' : ''}><input name="done-todo" onChange={(e) => checkItem(todo.id, e)} type="checkbox" className="done-todo" /> {todo.text} </li>
+                        return <li 
+                        contentEditable={true} 
+                        id={todo.id} 
+                        className={todo.complete ? 'checked' : ''}>
+                        <input name="done-todo"
+                        defaultChecked={todo.complete} 
+                        //defaultChecked={true} 
+                        onChange={(e) => checkItem(todo.id, e)} 
+                        type="checkbox" className="done-todo" /> {todo.text} </li>
                     })}
                 </ol>
                 <div>
                     <ul id="filters">
                         <li>
-                            <a href="#" data-filter="all" className={todos.statusOfList === "all" ? "selected" : ""}
+                            <a href="#" data-filter="all" className={status === "all" ? "selected" : ""}
                                 onClick={()=>showTodoList('all')}>ALL</a>
                         </li>
                         <li>
-                            <a href="#" data-filter="active" className={todos.statusOfList === "active" ? "selected" : ""}
+                            <a href="#" data-filter="active" className={status === "active" ? "selected" : ""}
                                 onClick={()=>showTodoList('active')}>Active</a>
                         </li>
                         <li>
-                            <a href="#" data-filter="complete" className={todos.statusOfList === "complete" ? "selected" : ""}
+                            <a href="#" data-filter="complete" className={status === "complete" ? "selected" : ""}
                                 onClick={()=>showTodoList('complete')}>Complete</a>
                         </li>
                     </ul>
