@@ -1,6 +1,6 @@
 import {connect} from 'react-redux'
 import TodoForm from "../components/TodoForm";
-import {addTodo,checkItem,showTodoList} from "../actions";
+import {addTodo,checkItem,showTodoList,updateItemContent} from "../actions";
 
 import todosAPI from '../api/TodoResourseAPI';
 const mapStateToProps=(state,ownProps)=>{
@@ -21,14 +21,12 @@ const mapDispatchToProps=(dispatch)=>({
         dispatch(checkItem(id,eve))
     },
     showTodoList:(filterType) =>{
-        //const todo=todosAPI.filerByStatus(filterType)
         dispatch(showTodoList(filterType))
-        //dispatch(showTodoList(todo.status))
+    },
+    updateItemContent:(viewId, content)=>{
+        todosAPI.updateItemContent(viewId,content)
+        console.log(todosAPI)
+        dispatch(updateItemContent(viewId, content))
     }
-    // return {
-    //     addTodo:(item) => dispatch(addTodo(item)),
-    //     checkItem:(id,eve) => dispatch(checkItem(id,eve)),
-    //     showTodoList:(filterType) => dispatch(showTodoList(filterType))
-    // }
 })
 export default connect(mapStateToProps,mapDispatchToProps)(TodoForm)

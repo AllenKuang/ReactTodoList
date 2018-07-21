@@ -1,7 +1,7 @@
 import Todo from '../model/Todo';
 
 const todosAPI = {
-    todos: [{ id: "1", text: "第一个任务", complete: false }],
+    todos: [],
     status: Todo.ALL,
     add(item) {
         this.todos.push(item);

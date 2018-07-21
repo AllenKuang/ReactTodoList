@@ -5,6 +5,9 @@ export default class TodoForm extends Component {
         super(props);
          //this.toAdd = this.refs.inputtext.value;
          this.inputtext=React.createRef();
+         this.state = {
+            inputstatus: 'read'
+          };
     }
     filterByStatus=(todos, status)=> {
         const filterExecuters = {
@@ -48,6 +51,19 @@ export default class TodoForm extends Component {
         addTodo(item)
         this.inputtext.current.value="";
     }
+
+    changeToEditable() {
+        console.log('双击span')
+        this.setState({ inputstatus: 'write' });
+      }
+
+    updateItem(e, viewId, content,todos) {
+        if (e.keyCode === 13) {
+          this.props.updateItemContent(viewId, content);
+          // console.log(this.props.item);
+          this.setState({ inputstatus: 'read' });
+        }
+      }
     render() {
         const{todos,status,checkItem,showTodoList}=this.props;
         //let toAdd = this.inputtext.current.value; 还没渲染就想取得inputtext，不存在的
@@ -61,15 +77,28 @@ export default class TodoForm extends Component {
                 <br />
                 <ol>
                 {this.filterByStatus(todos,status).map(todo => {
-                        return <li 
-                        contentEditable={true} 
-                        id={todo.id} 
-                        className={todo.complete ? 'checked' : ''}>
-                        <input name="done-todo"
-                        defaultChecked={todo.complete} 
-                        //defaultChecked={true} 
-                        onChange={(e) => checkItem(todo.id, e)} 
-                        type="checkbox" className="done-todo" /> {todo.text} </li>
+                        return <li id={todo.id} className={todo.complete ? 'checked' : ''}>
+                            <input name="done-todo"
+                                defaultChecked={todo.complete?true:''} 
+                                //defaultChecked={true} 
+                                onChange={(e) => checkItem(todo.id, e)} 
+                                type="checkbox" className="done-todo" /> 
+                            <span onDoubleClick={e => this.changeToEditable(e)}>
+                                {this.state.inputstatus==='read'?(
+                                    todo.text):(
+                                        <input
+                                            autoFocus
+                                            className="edit-input"
+                                            defaultValue={todo.text}
+                                            onKeyUp={e =>
+                                                this.updateItem(e, todo.id, e.currentTarget.value,todos)
+                                            }
+                                            />
+                                    )
+                                
+                            }
+                            </span>
+                        </li>      
                     })}
                 </ol>
                 <div>
