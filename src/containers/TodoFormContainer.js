@@ -6,7 +6,7 @@ import todosAPI from '../api/TodoResourseAPI';
 const mapStateToProps=(state,ownProps)=>{
     return {
         todos:state.list,
-        status:state.status
+        statusOfList:state.statusOfList 
     }
 }
 const mapDispatchToProps=(dispatch)=>({
@@ -20,8 +20,8 @@ const mapDispatchToProps=(dispatch)=>({
         //console.log(todosAPI)
         dispatch(checkItem(id,eve))
     },
-    showTodoList:(filterType) =>{
-        dispatch(showTodoList(filterType))
+    showTodoList:(filterType,event) =>{
+        dispatch(showTodoList(filterType,event))
     },
     updateItemContent:(viewId, content)=>{
         todosAPI.updateItemContent(viewId,content)

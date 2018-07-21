@@ -9,20 +9,24 @@ export default class TodoForm extends Component {
             inputstatus: 'read'
           };
     }
-    filterByStatus=(todos, status)=> {
-        const filterExecuters = {
-            all() {
-                return true;
-            },
-            active(element) {
-                return !element.complete;
-            },
-            complete(element) {
-                return element.complete;
-            }
-        }
-        const result = todos.filter(filterExecuters[status]);
-        return result;
+    filterByStatus=(todos, statusOfList)=> {
+        if (statusOfList === Todo.ALL) {
+            return todos;
+          }
+        return todos.filter(item => item.status === statusOfList);
+        // const filterExecuters = {
+        //     all() {
+        //         return true;
+        //     },
+        //     active(element) {
+        //         return !element.complete;
+        //     },
+        //     complete(element) {
+        //         return element.complete;
+        //     }
+        // }
+        // const result = todos.filter(filterExecuters[status]);
+        // return result;
     }
     generateUUID = () => {
         /*jshint bitwise:false */
@@ -46,7 +50,7 @@ export default class TodoForm extends Component {
 
     add=()=>{
         const toAdd=this.inputtext.current.value;
-        const item={ id: this.generateUUID(), text:toAdd,complete: false }
+        const item={ id: this.generateUUID(), text:toAdd,status: Todo.ACTIVE }
         const addTodo=this.props.addTodo;
         addTodo(item)
         this.inputtext.current.value="";
@@ -65,7 +69,7 @@ export default class TodoForm extends Component {
         }
       }
     render() {
-        const{todos,status,checkItem,showTodoList}=this.props;
+        const{todos,statusOfList,checkItem,showTodoList}=this.props;
         //let toAdd = this.inputtext.current.value; 还没渲染就想取得inputtext，不存在的
         return (
             <div>
@@ -76,10 +80,10 @@ export default class TodoForm extends Component {
                 </div>
                 <br />
                 <ol>
-                {this.filterByStatus(todos,status).map(todo => {
-                        return <li id={todo.id} className={todo.complete ? 'checked' : ''}>
+                {this.filterByStatus(todos,statusOfList).map(todo => {
+                        return <li id={todo.id} className={todo.status===Todo.COMPLETED ? 'checked' : ''}>
                             <input name="done-todo"
-                                defaultChecked={todo.complete?true:''} 
+                                defaultChecked={todo.status===Todo.COMPLETED} 
                                 //defaultChecked={true} 
                                 onChange={(e) => checkItem(todo.id, e)} 
                                 type="checkbox" className="done-todo" /> 
@@ -104,16 +108,16 @@ export default class TodoForm extends Component {
                 <div>
                     <ul id="filters">
                         <li>
-                            <a href="#" data-filter="all" className={status === "all" ? "selected" : ""}
-                                onClick={()=>showTodoList('all')}>ALL</a>
+                            <a href="#" data-filter="all" className={statusOfList === "all" ? "selected" : ""}
+                                onClick={(event)=>showTodoList(event)}>ALL</a>
                         </li>
                         <li>
-                            <a href="#" data-filter="active" className={status === "active" ? "selected" : ""}
-                                onClick={()=>showTodoList('active')}>Active</a>
+                            <a href="#" data-filter="active" className={statusOfList === "active" ? "selected" : ""}
+                                onClick={(event)=>showTodoList(event)}>Active</a>
                         </li>
                         <li>
-                            <a href="#" data-filter="complete" className={status === "complete" ? "selected" : ""}
-                                onClick={()=>showTodoList('complete')}>Complete</a>
+                            <a href="#" data-filter="completed" className={statusOfList === "completed" ? "selected" : ""}
+                                onClick={(event)=>showTodoList(event)}>Complete</a>
                         </li>
                     </ul>
                 </div>
