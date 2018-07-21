@@ -2,9 +2,9 @@ import Todo from '../model/Todo';
 
 const todosAPI = {
     todos: [],
-    //status: Todo.ALL,
     add(item) {
         this.todos.push(item);
+        return this.todos;
       },
       filerByStatus(status) {
         if (status === Todo.ALL) {

@@ -9,25 +9,6 @@ export default class TodoForm extends Component {
             inputstatus: 'read'
           };
     }
-    filterByStatus=(todos, statusOfList)=> {
-        if (statusOfList === Todo.ALL) {
-            return todos;
-          }
-        return todos.filter(item => item.status === statusOfList);
-        // const filterExecuters = {
-        //     all() {
-        //         return true;
-        //     },
-        //     active(element) {
-        //         return !element.complete;
-        //     },
-        //     complete(element) {
-        //         return element.complete;
-        //     }
-        // }
-        // const result = todos.filter(filterExecuters[status]);
-        // return result;
-    }
     generateUUID = () => {
         /*jshint bitwise:false */
         var i,
@@ -50,14 +31,15 @@ export default class TodoForm extends Component {
 
     add=()=>{
         const toAdd=this.inputtext.current.value;
-        const item={ id: this.generateUUID(), text:toAdd,status: Todo.ACTIVE }
+        //const item={ id: this.generateUUID(), content:toAdd,status: Todo.ACTIVE }
         const addTodo=this.props.addTodo;
-        addTodo(item)
+        // console.log("add-------todo"+JSON.stringify(item));
+        //addTodo(item)
+        addTodo(new Todo(this.generateUUID(),toAdd))
         this.inputtext.current.value="";
     }
 
     changeToEditable() {
-        console.log('双击span')
         this.setState({ inputstatus: 'write' });
       }
 
@@ -80,22 +62,23 @@ export default class TodoForm extends Component {
                 </div>
                 <br />
                 <ol>
-                {this.filterByStatus(todos,statusOfList).map(todo => {
-                        return <li id={todo.id} className={todo.status===Todo.COMPLETED ? 'checked' : ''}>
+                {/* {this.filterByStatus(todos,statusOfList).map(todo => { */}
+                    {todos.map(todo => {
+                        return <li id={todo.viewId} className={todo.status===Todo.COMPLETED ? 'checked' : ''}>
                             <input name="done-todo"
                                 defaultChecked={todo.status===Todo.COMPLETED} 
                                 //defaultChecked={true} 
-                                onChange={(e) => checkItem(todo.id, e)} 
+                                onChange={() => checkItem(todo.viewId, statusOfList)} 
                                 type="checkbox" className="done-todo" /> 
                             <span onDoubleClick={e => this.changeToEditable(e)}>
                                 {this.state.inputstatus==='read'?(
-                                    todo.text):(
+                                    todo.content):(
                                         <input
                                             autoFocus
                                             className="edit-input"
-                                            defaultValue={todo.text}
+                                            defaultValue={todo.content}
                                             onKeyUp={e =>
-                                                this.updateItem(e, todo.id, e.currentTarget.value,todos)
+                                                this.updateItem(e, todo.viewId, e.currentTarget.value,todos)
                                             }
                                             />
                                     )
