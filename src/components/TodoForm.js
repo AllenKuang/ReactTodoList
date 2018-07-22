@@ -35,7 +35,7 @@ export default class TodoForm extends Component {
         const addTodo=this.props.addTodo;
         // console.log("add-------todo"+JSON.stringify(item));
         //addTodo(item)
-        addTodo(new Todo(this.generateUUID(),toAdd))
+        addTodo(new Todo(parseFloat(this.generateUUID()),toAdd),this.props.showTodoList)
         this.inputtext.current.value="";
     }
 
@@ -43,9 +43,9 @@ export default class TodoForm extends Component {
         this.setState({ inputstatus: 'write' });
       }
 
-    updateItem(e, viewId, content,todos) {
+    updateItem( e,viewId, content,statusOfList) {
         if (e.keyCode === 13) {
-          this.props.updateItemContent(viewId, content);
+          this.props.updateItemContent(viewId, content,statusOfList);
           // console.log(this.props.item);
           this.setState({ inputstatus: 'read' });
         }
@@ -64,11 +64,11 @@ export default class TodoForm extends Component {
                 <ol>
                 {/* {this.filterByStatus(todos,statusOfList).map(todo => { */}
                     {todos.map(todo => {
-                        return <li id={todo.viewId} className={todo.status===Todo.COMPLETED ? 'checked' : ''}>
+                        return <li id={todo.id} className={todo.status===Todo.COMPLETED ? 'checked' : ''}>
                             <input name="done-todo"
                                 defaultChecked={todo.status===Todo.COMPLETED} 
                                 //defaultChecked={true} 
-                                onChange={() => checkItem(todo.viewId, statusOfList)} 
+                                onChange={() => checkItem(todo.id, statusOfList,todo)} 
                                 type="checkbox" className="done-todo" /> 
                             <span onDoubleClick={e => this.changeToEditable(e)}>
                                 {this.state.inputstatus==='read'?(
@@ -78,7 +78,7 @@ export default class TodoForm extends Component {
                                             className="edit-input"
                                             defaultValue={todo.content}
                                             onKeyUp={e =>
-                                                this.updateItem(e, todo.viewId, e.currentTarget.value,todos)
+                                                this.updateItem( e,todo.id, e.currentTarget.value,statusOfList)
                                             }
                                             />
                                     )

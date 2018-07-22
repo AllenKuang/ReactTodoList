@@ -1,4 +1,4 @@
-export  const  addTodo=(item,todos)=>{return { type: 'ADD_TODO',item,todos}}
+export  const  addTodo=(todos)=>{return { type: 'ADD_TODO',todos}}
 export  const  checkItem=(list)=>{return { type: 'CHECK_ITEM',list}}
 export  const  showTodoList=(filter, list)=>{return { type: 'SHOW_TODOLIST',filter, list}}
-export  const  updateItemContent=(viewId,content)=>{return { type: 'UPDATE_ItemContent',viewId,content}}
+export  const  updateItemContent=(list)=>{return { type: 'UPDATE_ItemContent',list}}
