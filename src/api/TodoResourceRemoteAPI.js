@@ -1,80 +1,102 @@
 import Todo from '../model/Todo';
-const axios=require('axios')
+import { addTodo, checkItem, showTodoList, updateItemContent } from "../actions";
+const axios = require('axios')
 const todosRemoteAPI = {
     //todos: [],
     //apiUrl:'https://5b52c0d5d9b92700141c9977.mockapi.io/todolist',
-    apiUrl:'http://localhost:8080/api/todos',
-    get(success){
-        axios.get(this.apiUrl)
-        .then(function (response) {
-          // handle success
-          //console.log(response);
-          success(response.data._embedded.todos) 
+    apiUrl: 'http://localhost:8080/api/todos',
+    init(init,dispatch,routeStatus){
+        let search = routeStatus;
+        if (routeStatus === 'all') {
+            search = 'completed,active'
+        }
+        axios.get(`${this.apiUrl}/search/statusOfTodos?status=${search}`)
+        .then( (response)=> { 
+            dispatch(init(response.data._embedded.todos))
         })
         .catch(function(error){
             console.log(error)
         })
     },
-    add(item,successCallBack) {
+    add(item,addTodo,statusOfList,dispatch) {
         axios
-        .post(this.apiUrl,{
-            id:'',
-            content:item.content,
-            status:item.status
-        })
-        .then(function(response){
-            //console.log(response.data)
-            successCallBack(
-                //new Todo(
-                    {
-                    viewId:response.data.id,
-                    content:response.data.content,
-                    status:response.data.status
-                    }
-                //)
-            )
-        })
-        .catch(function(error){
-            console.log(error)
-        })
-      },
-      filerByStatus(status,success) {
-        let search=status;
-        if(status==='all'){
-            search='completed,active'
+            .post(this.apiUrl, {
+                id: '',
+                content: item.content,
+                status: item.status
+            })
+            .then(response => {
+                this.getfiler(addTodo, statusOfList, dispatch)
+            })
+            .catch(function (error) {
+                console.log(error)
+            })
+    },
+    getfiler(operation, statusOfList, dispatch) {
+        let search = statusOfList;
+        if (statusOfList === 'all') {
+            search = 'completed,active'
         }
         axios.get(`${this.apiUrl}/search/statusOfTodos?status=${search}`)
             .then(function (response) {
-            success(response.data._embedded.todos) 
+                dispatch(operation(response.data._embedded.todos))
             })
-            .catch(function(error){
+            .catch(function (error) {
                 console.log(error)
             })
-      },
-      toggleActive(viewId,newStatus) {
-          console.log(`${this.apiUrl}/${viewId}`)
+    },
+    filerByStatus(statusOfList, dispatch) {
+        let search = statusOfList;
+        if (statusOfList === 'all') {
+            search = 'completed,active'
+        }
+        axios.get(`${this.apiUrl}/search/statusOfTodos?status=${search}`)
+            .then(function (response) {
+                dispatch(showTodoList(statusOfList, response.data._embedded.todos))
+            })
+            .catch(function (error) {
+                console.log(error)
+            })
+    },
+    filerByStatus(statusOfList, dispatch) {
+        let search = statusOfList;
+        if (statusOfList === 'all') {
+            search = 'completed,active'
+        }
+        axios.get(`${this.apiUrl}/search/statusOfTodos?status=${search}`)
+            .then(function (response) {
+                dispatch(showTodoList(statusOfList, response.data._embedded.todos))
+            })
+            .catch(function (error) {
+                console.log(error)
+            })
+    },
+    toggleActive(viewId, newStatus,checkItem,statusOfList,dispatch) {
+        console.log(`${this.apiUrl}/${viewId}`)
         axios
-        .patch(`${this.apiUrl}/${viewId}`,{
-            status:newStatus
-        })
-        .then(response=>{
-            console.log('toggle')
-        })
-        .catch(error=>{
-            console.log(error)
-        })  
-      },
-      updateItemContent(viewId, content) {
+            .patch(`${this.apiUrl}/${viewId}`, {
+                status: newStatus
+            })
+            .then(response => {
+                this.getfiler(checkItem,statusOfList,dispatch)
+                console.log('toggle')
+            })
+            .catch(error => {
+                console.log(error)
+            })
+    },
+    updateItemContent(viewId, content,updateItemContent,statusOfList,dispatch) {
         axios
-        .patch(`${this.apiUrl}/${viewId}`,{
-            content:content
-        })
-        .then(response=>{
-            console.log('updatContent')
-        })
-        .catch(error=>{
-            console.log(error)
-        }) 
-      }
+            .patch(`${this.apiUrl}/${viewId}`, {
+                content: content
+            })
+            .then(response => {
+                this.getfiler(updateItemContent,statusOfList,dispatch)
+                console.log(response)
+            })
+            .catch(error => {
+                console.log(error)
+            })
+    }
 }
 export default todosRemoteAPI;

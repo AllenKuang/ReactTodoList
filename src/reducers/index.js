@@ -19,6 +19,11 @@ export default (state = { list:[],statusOfList: Todo.ALL}, action) => {
             const newState = [...action.list]
             return { list: newState, statusOfList: state.statusOfList }
         }
+        case 'INIT':
+        {
+            const newState=[...action.list]
+            return {list: newState, statusOfList: state.statusOfList }
+        }
         default:
             return state
     }

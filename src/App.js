@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import ReactDOM from 'react-dom'
-
+import {BrowserRouter,Route,Link} from 'react-router-dom'
 import './App.css';
-
 import TodoForm from './containers/TodoFormContainer';
 
 class App extends Component {
@@ -12,6 +9,7 @@ class App extends Component {
   }
   render() {
     return (
+      <BrowserRouter>
       <div className="container">
       <div>
           <h2>Jquery To Do List</h2>
@@ -19,10 +17,11 @@ class App extends Component {
               <em>Simple Todo List with adding and filter by diff status.</em>
           </p>
       </div>
-      <TodoForm />
-      
+      {/* <TodoForm /> */}
+      <Route exact path='/' component={TodoForm}/>
+      <Route path="/:routestatus" component={TodoForm}/>
   </div>
-      
+  </BrowserRouter>
       
     );
   }
