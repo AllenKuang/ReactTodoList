@@ -3,31 +3,17 @@ import TodoForm from "../components/TodoForm";
 import {addTodo,checkItem,showTodoList,updateItemContent,init} from "../actions";
 import Todo from '../model/Todo';
 import todosRemoteAPI from '../api/TodoResourceRemoteAPI';
-// const filterTdo=(todos,status)=>{
-//     if(status==="active"){
-//         return todos.filter()
-//     }
+// const isFiltered=(todo,status)=>{
+//     if(status===undefined)return true
+//     return todo.status;
 // }
-const isFiltered=(todo,status)=>{
-    if(status===undefined)return true
-    return todo.status;
-}
 const mapStateToProps=(state,ownProps)=>{
-    //const {list}=state;
-    const todos=state.list;
-    console.log(todos)
-    //const status = ownProps.match.params.status;
     let {match:{params:{routestatus}}}=ownProps
-    console.log("beforeroutestatus:"+routestatus)
     if(routestatus===undefined){
         routestatus='all'
     }
-    console.log("afterroutestatus:"+routestatus)
-    //const currentTodos=todos.filter(todo=>isFiltered(todo,routestatus))
-    //const current=showTodoList()
     return {
         todos:state.list,
-        //todos:currentTodos,
         statusOfList:state.statusOfList,
         routeFilter:routestatus
     }

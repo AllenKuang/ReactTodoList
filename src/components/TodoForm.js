@@ -1,10 +1,20 @@
 import React, { Component } from 'react';
 import Todo from '../model/Todo';
-import {BrowserRouter,Route,Link} from 'react-router-dom'
+import {Link} from 'react-router-dom'
+import {Button, Input, Row,Col} from 'antd'
+import 'antd/dist/antd.css';
 export default class TodoForm extends Component {
     constructor(props) {
         super(props);
          this.inputtext=React.createRef();
+         this.state={
+             inputValue:''
+         }
+    }
+    handleChange=(e)=>{
+        this.setState({
+            inputValue:e.target.value
+        })
     }
     componentDidMount(){
         this.props.init(this.props.routeFilter)
@@ -29,7 +39,7 @@ export default class TodoForm extends Component {
         return uuid;
     }
 
-    add=()=>{
+    add=(e)=>{
         const toAdd=this.inputtext.current.value;
         const addTodo=this.props.addTodo;
         addTodo(new Todo(parseFloat(this.generateUUID()),toAdd),this.props.statusOfList)
@@ -54,8 +64,11 @@ export default class TodoForm extends Component {
             <div>
                 <h1>TodoList</h1>
                 <div>
-                    <input ref={this.inputtext} className="input-text" type="text" name="ListItem" />
-                    <div id="button" onClick={this.add}>Add</div>
+                    <Row>
+                    {/* <Col span={19}><Input onChange={this.handleChange} ref={this.inputtext} type="text" name="ListItem"></Input></Col> */}
+                    <Col span={19}><input ref={this.inputtext} className="input-text" type="text" name="ListItem" /></Col>
+                    <Col span={5}><Button inputValue={this.state.inputValue} type="primary" onClick={this.add} style={{"margin-left":"15px"}}>Add</Button></Col>
+                    </Row>
                 </div>
                 <br />
                 <ol>

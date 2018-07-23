@@ -15,7 +15,8 @@ body {
 }
 
 .input-text{
-  width: 80%;
+  width: 100%;
+  margin-left:15px;
 }
 .edit-input {
   margin: 0;
@@ -56,7 +57,7 @@ ol li {
 }
 
 ol li:nth-child(even){
-  background: #f4ecec;
+  background: #d0e3f3;
 }
 
 li:hover{
@@ -71,7 +72,7 @@ cursor: pointer;
 }
 
 #filters li a {
-  color: #fc999b;
+  color: #1890ff;
   margin: 3px;
   padding: 3px 7px;
   text-decoration: none;
@@ -80,10 +81,10 @@ cursor: pointer;
 }
 
 #filters li a.selected {
-  border-color: rgba(175, 47, 47, 0.2);
+  border-color: #1890ff;
 }
 #filters li a.selected, #filters li a:hover {
-  border-color: rgba(175, 47, 47, 0.1);
+  border-color: #1890ff;
 }
 
 #filters li {
